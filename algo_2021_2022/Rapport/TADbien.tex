@@ -1,0 +1,113 @@
+%\documentclass[11pt,a4paper]{article}
+%\usepackage{algorithmeUTF8}
+%\usepackage{classeRapport}
+
+%\begin{document}
+
+
+\subsubsection{TAD Mot}
+    \begin{tad}
+        \tadNom{Mot}
+        \tadDependances{\caractere, \chaine, \booleen}
+        \begin{tadOperations}{---------------------}
+        	\tadOperationAvecPreconditions{creerMot}{\tadUnParam{\chaine}}{\tadUnParam{Mot}}
+            \tadOperation{longueur}{\tadUnParam{Mot}}{\tadUnParam{\naturel}}
+            \tadOperation{estUnMot}{\tadUnParam{\chaine}}{\tadUnParam{\booleen}}
+            \tadOperationAvecPreconditions{iemeCaractere}{\tadDeuxParams{Mot}{\naturelNonNul}}{\tadUnParam{\caractere}}
+            \tadOperationAvecPreconditions{remplaceLettre}{\tadTroisParams{Mot}{\caractere}{\naturelNonNul}}{\tadUnParam{Mot}}
+			\tadOperationAvecPreconditions{inverseLettres}{\tadDeuxParams{Mot}{\naturelNonNul}}{\tadUnParam{Mot}}
+			\tadOperationAvecPreconditions{supprimeLettre}{\tadDeuxParams{Mot}{\naturelNonNul}}{\tadUnParam{Mot}}
+			\tadOperationAvecPreconditions{insereLettre}{\tadTroisParams{Mot}{\caractere}{\naturelNonNul}}{\tadUnParam{Mot}}
+			\tadOperationAvecPreconditions{decomposeMot}{\tadDeuxParams{Mot}{\naturelNonNul}}{\tadDeuxParams{Mot}{Mot}}
+			\tadOperation{estUnCaractereValide}{\tadUnParam{\caractere}}{\tadUnParam{\booleen}}
+		\end{tadOperations}
+
+        \begin{tadSemantiques}{---------------------}
+            \tadSemantique{creerMot}{Créer un mot à partir d'une chaîne de caractères qui ne contient que des lettres et éventuellement un tiret ou une apostrophe à l'intérieur de la chaîne.}
+            \tadSemantique{longueur}{Donne le nombre de caractères contenus dans le mot.}
+            \tadSemantique{estUnMot}{Teste si la chaîne de caractère possède bien uniquement des lettres et éventuellement un tiret ou une apostrophe à l'intérieur de la chaîne.}
+            \tadSemantique{iemeCaractere}{Renvoie le ième caractère du mot.}
+            \tadSemantique{remplaceLettre}{Remplace le ième caractère du mot par un caractère choisi.}
+            \tadSemantique{inverseLettres}{Inverse deux lettres consécutives du mot.}
+            \tadSemantique{supprimeLettre}{Supprime le ième caractère du mot.}
+            \tadSemantique{insereLettre}{Insère un caractère à la ième place du mot.}
+            \tadSemantique{decomposeMot}{Décompose le mot en deux mots après le ième caractère.}
+            \tadSemantique{estUnCaractereValide}{Teste si un caractère est valide pour être inséré dans un mot.}
+        \end{tadSemantiques}
+
+        \begin{tadPreconditions}{Mot}
+            \tadPrecondition{creerMot(CdC)}{estUnMot(CdC)}
+            \tadPrecondition{iemeCaractere(mot, i)}{i $\leq$ longueur(mot)}
+            \tadPrecondition{remplaceLettre(mot, l, i)}{i $\leq$ longueur(mot)}
+            \tadPrecondition{inverseLettres(mot, i)}{i $<$ longueur(mot)}
+            \tadPrecondition{supprimeLettre(mot, i)}{longueur(mot) $\geq$ 2 et i $\leq$ longueur(mot)}
+            \tadPrecondition{insereLettre(mot, l, i)}{i $\leq$ longueur(mot)+1 et estUnCaractereValide(l)}
+            \tadPrecondition{decomposeMot(mot, i)}{longueur(mot) $\geq$ 2 et i $\leq$ longueur(mot)-1}
+        \end{tadPreconditions}
+
+    \end{tad}
+
+
+\subsubsection{TAD Dictionnaire}
+    \begin{tad}
+        \tadNom{Dictionnaire}
+        \tadDependances{Mot, \booleen, Fichier}
+        \begin{tadOperations}{------------------------}
+            \tadOperation{creerDictionnaire}{\tadUnParam{}}{\tadUnParam{Dictionnaire}}
+            \tadOperation{estVide}{\tadUnParam{Dictionnaire}}{\tadUnParam{\booleen}}
+            \tadOperation{ajouteMot}{\tadDeuxParams{Dictionnaire}{Mot}}{\tadUnParam{Dictionnaire}}
+            \tadOperationAvecPreconditions{estPresent}{\tadDeuxParams{Dictionnaire}{Mot}}{\tadUnParam{\booleen}}
+            \tadOperationAvecPreconditions{dictionnaireEnFichier}{\tadDeuxParams{Fichier}{Dictionnaire}}{\tadUnParam{Fichier}}
+            \tadOperationAvecPreconditions{fichierEnDictionnaire}{\tadDeuxParams{Fichier}{Dictionnaire}}{\tadUnParam{Dictionnaire}}
+        \end{tadOperations}
+
+        \begin{tadAxiomes}
+            \tadAxiome{estVide(creerDictionnaire)}
+            \tadAxiome{ajouteMot(ajouteMot(dico, mot), mot) = ajouteMot(dico, mot)}
+            \tadAxiome{estPresent(ajouteMot(dico, mot), mot)}
+        \end{tadAxiomes}
+
+        \begin{tadPreconditions}{Dictionnaire}
+            \tadPrecondition{estPresent(dico, mot)}{non estVide(dico)}
+            \tadPrecondition{dictionnaireEnFichier(fdico, dico)}{estOuvert(fdico)} %Verifier si c'est bien comme ça qu'on fait une précondition, même si c'est une procédure
+            \tadPrecondition{fichierEnDictionnaire(fdico, dico)}{estOuvert(fdico)}
+        \end{tadPreconditions}
+    \end{tad}
+
+
+\subsubsection{TAD Correcteur Orthographique}
+    \begin{tad}
+        \tadNom{Correcteur Orthographique}
+        \tadDependances{Mot, Dictionnaire}
+        \begin{tadOperations}{---------------------------}
+            \tadOperation{creerCorrecteur}{\tadUnParam{Dictionnaire}}{\tadUnParam{Correcteur Orthographique}}
+            \tadOperationAvecPreconditions{corrigeParInversion}{\tadDeuxParams{Mot}{Correcteur Orthographique}}{\tadUnParam{Correcteur Orthographique}}
+            \tadOperation{corrigeParInsertion}{\tadDeuxParams{Mot}{Correcteur Orthographique}}{\tadUnParam{Correcteur Orthographique}}
+            \tadOperationAvecPreconditions{corrigeParDecomposition}{\tadDeuxParams{Mot}{Correcteur Orthographique}}{\tadUnParam{Correcteur Orthographique}}
+            \tadOperationAvecPreconditions{corrigeParSuppression}{\tadDeuxParams{Mot}{Correcteur Orthographique}}{\tadUnParam{Correcteur Orthographique}} % doit-on mettre une précondition comme quoi le mot ne doit pas avoir qu'une seule lettre?
+            \tadOperationAvecPreconditions{corrigeParRemplacement}{\tadDeuxParams{Mot}{Correcteur Orthographique}}{\tadUnParam{Correcteur Orthographique}}
+        \end{tadOperations}
+
+        \begin{tadSemantiques}{-------------------------------}
+            \tadSemantique{creerCorrecteur}{Crée un correcteur orthorgaphique à partir d'un dictionnaire.}
+            \tadSemantique{corrigeParInversion}{Renvoie les corrections possibles du mot si l'on inverse 2 caractères consécutifs.}
+            \tadSemantique{corrigeParInsertion}{Renvoie les corrections possibles du mot si on lui insère une lettre.}
+            \tadSemantique{corrigeParDecomposition}{Renvoie les corrections possibles du mot si on le décompose en deux mots.}
+            \tadSemantique{corrigeParSuppression}{Renvoie les corrections possibles du mot si on lui insère une lettre.}
+            \tadSemantique{corrigeParRemplacement}{Renvoie les corrections possibles du mot si on lui insère une lettre.}
+        \end{tadSemantiques}
+
+        \begin{tadPreconditions}{Dictionnaire}
+            \tadPrecondition{corrigeParInversion(mot, correcteur)}{longueur(mot) $\geq$ 2}
+            \tadPrecondition{corrigeParDecomposition(mot, correcteur)}{longueur(mot) $\geq$ 2}
+            \tadPrecondition{corrigeParSuppression(mot, correcteur)}{longueur(mot) $\geq$ 2}
+            \tadPrecondition{corrigeParRemplacement(mot, correcteur)}{longueur(mot) $\geq$ 2}
+        \end{tadPreconditions}
+    \end{tad}
+    
+\subsubsection{Autres TAD utilisés}
+	On utilise aussi les 2 types fournis dans le sujet, soit le TAD FichierTexte ainsi que le type Mode.
+	
+
+
+%\end{document}

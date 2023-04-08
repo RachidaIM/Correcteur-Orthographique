@@ -1,0 +1,160 @@
+
+Type Mot=Structure (liste)
+ 	data:Tableau de  chaine de caractere (liste) 
+ 	longueur : Naturel
+ 	
+ fin structure 
+ 
+ 
+ 
+ 
+fonction CreeMot(chaine:chaine de caractere): Mot
+ declaration 	mot  : Mot 
+ debut 
+ 	mot.data= Tableau de  chaine de caractere;
+	mot.longueur =langueur(chaine);
+	retourner mot ; 
+fin 
+
+
+
+
+fonction ObtenirdataMot (mot:Mot ): chaine 
+	retourner  mot.data;
+
+fin 
+
+fonction  ObtenirLongueur(Mot mot) : naturel 
+	retourner  mot.longueur;
+	
+fin 	
+	
+	
+fonction estUnMot(mot : Mot): Booleen 
+	Declaration : 
+			resultat : booleen
+			i naturel
+	Debut 
+			resultat : booleen
+			resultat <---vrai 
+			i <--- 1 
+		tant que (resultat & estUnCaractereValide(iemeCaractere(mot,i)))
+			i=i+1
+	        retourner resultat 
+	        
+fin 	        
+	        
+	        
+fonction iemeCaractere(mot:Mot,i: NaturelNonNul): caractere 
+ 	Precondition : i <= longueur(mot) 	        
+      	retourner mot.data[i]
+      	
+   fin    	
+      	
+      	
+     
+Procedure insertionLettre (E/S mot: Mot,E C: caractere,E i : naturel) // page 5/13 cour 7 
+     		Precondition : 	1<= i<=longueur(mot)+1 
+     					estUnCaractereValide(c)  // lettre ou tiret 
+     debut 
+     decalerVersLaDroite(mot, i)
+     mot.langueur ← mot.langueur +1
+     mot.data[i] ← c
+     
+    fin  
+     
+     
+procedure suppressionLettre(E/S mot : Mot, E i: Naturel)
+	precondition(s) 1 ≤i ≤longueur (mot)
+	debut
+		decalerVersLaGauche(mot, i+1)
+		mot.langueur ← mot.langueur-1
+fin 		
+		
+		
+	
+	
+		
+		
+ inversionLettres:   Mot x Naturel -/-> Mot //i , i+1
+ procedure  inversionLettres(E/S mot:Mot, E i: naturel )
+ 		precondtion : 
+ 		 		longueur(mot)>1 et i<=longueur(mot)
+     debut 
+     			mot.echanger(mot.data[i],mot.data[i+1])
+     fin 
+     
+     
+     
+     
+decomposerMot:      Mot x Naturel -/->  Mot x Mot
+procedure decomposerMot (E mot: Mot , S mot1: Mot, S mot2: MOt ,E langeurmot1 Naturel )
+ 		precondtion  longueur(mot)>1 et longueurmot1 <= longueur(mot)
+     debut 
+     mot1<--''
+     mot2<--''
+     pour i<-- 1 à langueurmot1 faire 
+      		insertionLettre(mot1,iemecaractere(mot,i),i)
+      		mot.longueur<-- mot.longuur+1
+     finpour 
+     
+     
+     
+     pour i<-- langueurmot1 à langueur(mot) faire 
+      		insertionLettre(mot1,iemecaractere(mot2,i),i)
+      		mot.longueur<-- mot.longueur+1
+     finpour 
+     
+   fin  
+     
+
+
+
+remplacerLettre:    Mot x Caractère x Naturel -/-> Mot
+
+procedure(E/S mot: Mot,E c: Caractere,E position : naturel)
+        precondtion : position  <= longueur(mot) 
+      Debut 
+      suppressionLettre(mot,position)
+      insertionLettre(mot,c,position)
+          
+  fin 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     

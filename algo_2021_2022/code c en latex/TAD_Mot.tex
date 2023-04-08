@@ -1,0 +1,214 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+ 
+\definecolor{darkWhite}{rgb}{0.94,0.94,0.94}
+ 
+\lstset{
+  aboveskip=3mm,
+  belowskip=-2mm,
+  backgroundcolor=\color{darkWhite},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  commentstyle=\color{red},
+  deletekeywords={...},
+  escapeinside={\%*}{*)},
+  extendedchars=true,
+  framexleftmargin=16pt,
+  framextopmargin=3pt,
+  framexbottommargin=6pt,
+  frame=tb,
+  keepspaces=true,
+  keywordstyle=\color{blue},
+  language=C,
+  literate=
+  {²}{{\textsuperscript{2}}}1
+  {⁴}{{\textsuperscript{4}}}1
+  {⁶}{{\textsuperscript{6}}}1
+  {⁸}{{\textsuperscript{8}}}1
+  {€}{{\euro{}}}1
+  {é}{{\'e}}1
+  {è}{{\`{e}}}1
+  {ê}{{\^{e}}}1
+  {ë}{{\¨{e}}}1
+  {É}{{\'{E}}}1
+  {Ê}{{\^{E}}}1
+  {û}{{\^{u}}}1
+  {ù}{{\`{u}}}1
+  {â}{{\^{a}}}1
+  {à}{{\`{a}}}1
+  {á}{{\'{a}}}1
+  {ã}{{\~{a}}}1
+  {Á}{{\'{A}}}1
+  {Â}{{\^{A}}}1
+  {Ã}{{\~{A}}}1
+  {ç}{{\c{c}}}1
+  {Ç}{{\c{C}}}1
+  {õ}{{\~{o}}}1
+  {ó}{{\'{o}}}1
+  {ô}{{\^{o}}}1
+  {Õ}{{\~{O}}}1
+  {Ó}{{\'{O}}}1
+  {Ô}{{\^{O}}}1
+  {î}{{\^{i}}}1
+  {Î}{{\^{I}}}1
+  {í}{{\'{i}}}1
+  {Í}{{\~{Í}}}1,
+  morekeywords={*,...},
+  numbers=left,
+  numbersep=10pt,
+  numberstyle=\tiny\color{black},
+  rulecolor=\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  stringstyle=\color{gray},
+  tabsize=4,
+  title=\lstname,
+}
+ 
+\begin{document}
+ 
+\begin{lstlisting}
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include <stdbool.h>
+#include "TAD_Mot.h"
+
+char *caracteresValides = "abcdefghijklmnopqrstuvwxyzéèàçù-'";
+
+Mot creerMot(char *CdC){
+    Mot mot;
+    mot.data = "";
+    mot.longueur = 0;
+    fixeData(mot, CdC);
+    fixeLongueur(mot, strlen(CdC));
+    return mot;
+}
+
+char *obtenirData(Mot mot){
+    return mot.data;
+}
+
+void fixeData(Mot mot, char *CdC){
+    mot.data=CdC;
+}
+
+int longueur(Mot mot){
+    return mot.longueur;
+}
+
+void fixeLongueur(Mot mot, int l){
+    mot.longueur=l;
+}
+
+Mot copieMot(Mot mot){
+    char *copieData = "";
+    Mot copieMot = creerMot("");
+    char *data = obtenirData(mot);
+    memcpy(copieData, &data, sizeof(char)*(longueur(mot)+1)); // je prends un caractère de plus pour éviter le probleme de la mémoire quand on insère une lettre
+    fixeData(copieMot, copieData);
+    fixeLongueur(copieMot, longueur(mot));
+    return copieMot;
+}
+
+bool estUnMot(char *CdC){
+    bool mot=true;
+    int i=0;
+    while (mot && i<strlen(CdC)){
+        bool estValide = estUnCaractereValide(CdC[i]);
+        if (!(estValide)){
+            mot=false;
+        }
+        i++;
+    }
+    return mot;
+}
+
+char iemeCaractere(Mot mot, int i){
+    char *data = obtenirData(mot);
+    return data[i];
+}
+
+void modifieiemeCaractere(Mot mot, char c, int i){
+    mot.data[i]=c; //doit-on mettre des "" ?
+}
+
+Mot remplaceLettre(Mot mot, char c, int i){
+    Mot testMot=copieMot(mot);
+    modifieiemeCaractere(testMot, c, i);
+    return testMot;
+}
+
+Mot inverseLettres(Mot mot, int i){
+    char ci1, ci2;
+    Mot testMot=copieMot(mot);
+    ci1 = iemeCaractere(testMot, i);
+    ci2 = iemeCaractere(testMot, i+1);
+    remplaceLettre(testMot, ci2, i);
+    remplaceLettre(testMot, ci1, i+1);
+    return testMot;
+}
+
+Mot supprimeLettre(Mot mot, int i){
+    Mot testMot=copieMot(mot);
+    char iemeCar = iemeCaractere(testMot, i);
+    char *t=&iemeCar;
+    memmove(t, t+1, strlen(t+1)+1); // a tester j'ai vu ça sur le net
+    fixeLongueur(testMot, longueur(testMot)-1);
+    return testMot;
+}
+
+Mot insereLettre(Mot mot, char c, int i){
+    Mot testMot=copieMot(mot);
+    char iemeCar = iemeCaractere(testMot, i);
+    char *t=&iemeCar;
+    memmove(t+1, t, longueur(testMot)-i);
+    modifieiemeCaractere(testMot, c, i);
+    fixeLongueur(testMot, longueur(testMot)+1);
+    return testMot;
+}
+
+Mot *decomposeMot(Mot mot, int i){
+    Mot mot1, mot2;
+    char *data;
+    char data1[i];
+    Mot resultat[2];
+
+    data = obtenirData(mot);
+    for (int j=0; j<i; j++){
+        data1[j]=data[j];
+    }
+    mot1 = creerMot(data1);
+    mot2 = creerMot(data+i);
+
+    resultat[0]=mot1;
+    resultat[1]=mot2; //j'essaye de renvoyer un tableau de 2 mots vu qu'en C, on ne peut pas renvoyer 2 choses. je sais pas si ça marche écrit comme ça
+    return resultat;
+}
+
+
+bool estUnCaractereValide(char c){
+    int i = 1;
+    bool estValide = false;
+    while ((!estValide) && (i<= strlen(caracteresValides))){
+        if (c == caracteresValides[i]){
+            estValide = true;
+        }
+    }
+    return estValide;
+}
+ 
+
+\end{lstlisting}
+ 
+\end{document}

@@ -1,0 +1,90 @@
+Type CorrecteurOrthographique = Structure
+	dictionnaire: Dictionnaire
+	corrections: Ensemble <Mot>
+finstructure
+
+
+fonction Correcteur(d: Dictionnaire): CorrecteurOrthographique
+	Déclaration: correcteur: CorrecteurOrthographique
+	Début
+		correcteur.dictionnaire <- d
+		correcteur.corrections <- ensemble()		????????
+		retourne correcteur
+	Fin
+	
+fonction estPresentDansDictionnaire(m: Mot, c: CorrecteurOrthographique): Booleen
+	Début
+		retourne estPresent(m, c.dictionnaire)
+	Fin
+
+procédure ajouterCorrection(E/S c: CorrecteurOrthographique, E m: mot)
+	Début
+		ajouter(c.corrections, m)			///fonction "ajouter" du TAD ensemble
+	Fin
+
+
+fonction CorrectionParInversion(m: Mot, c: CorrecteurOrthographique): CorrecteurOrthographique
+	Déclaration: i: NNN, testMot: Mot
+	Début
+		Pour i <- 1 à longueurMot(m)-1:
+			testMot <- inversionLettres(m, i)
+			Si estPresentDansDictionnaire(testMot, c):
+				ajouterCorrection(c, testMot)
+			finSi
+		finPour
+	Fin
+
+
+fonction CorrectionParDecomposition(m: Mot, c: CorrecteurOrthographique): CorrecteurOrthographique
+	Déclaration: i: NNN, testMot1, testMot2: Mot
+	Début
+		Pour i <- 1 à longueurMot(m)-1:
+			testMot1, testMot2 <- decomposerMot(m, i)
+			Si estPresentDansDictionnaire(testMot1, c):
+				ajouterCorrection(c, testMot1)
+			finSi
+			Si estPresentDansDictionnaire(testMot2, c):
+				ajouterCorrection(c, testMot2)
+			finSi
+	Fin
+
+
+fonction CorrectionParSuppression(m: Mot, c: CorrecteurOrthographique): CorrecteurOrthographique
+	Déclaration: i: NNN, testMot
+	Début
+		Pour i <- 1 à longueurMot(m):
+			testMot <- suppressionLettre(m, i)
+			Si estPresentDansDictionnaire(testMot1, c):
+				ajouterCorrection(c, testMot1)
+			finSi
+		finPour
+	Fin
+
+
+
+fonction CorrectionParInsertion(m: Mot, c: CorrecteurOrthographique): CorrecteurOrthographique
+	Déclaration: i, j: NNN, testMot : Mot
+	Début
+		Pour i <- 1 à longueurMot(m)+1:
+			Pour j <- ord("a") à ord("a")+26:
+				testMot <- insertionLettre(m, char(j), i)
+				Si estPresentDansDictionnaire(testMot, c):
+					ajouterCorrection(c, testMot)
+				finSi
+			finPour
+		finPour
+	Fin
+
+
+fonction CorrectionParRemplacement(m: Mot, c: CorrecteurOrthographique): CorrecteurOrthographique
+	Déclaration: i, j: NNN, testMot : Mot
+	Début
+		Pour i <- 1 à longueurMot(m):
+			Pour j <- ord("a") à ord("a")+26:
+				testMot <- remplacerLettre(m, char(j), i)
+				Si estPresentDansDictionnaire(testMot, c):
+					ajouterCorrection(c, testMot)
+				finSi
+			finPour
+		finPour
+	Fin

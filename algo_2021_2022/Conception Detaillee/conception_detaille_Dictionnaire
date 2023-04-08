@@ -1,0 +1,171 @@
+Type Dictionnaire = ArbreNaire
+//--------------------------------------------------------------------------------------------------------//
+
+Type ArbreNaire = Structure
+	e : Element
+	fils : LC <Dictionnaire> 
+	nbFils : Naturel
+finstructure
+
+					( fonction ArbreNaire(): ArbreNaire
+					déclaration a : ArbreNaire
+					début
+						fixerFils(a, listeVide())
+						fixerNbFils(a,0)
+						fixerCaractère(a,'')
+						fixerBooléen(a,FAUX)
+						retourner a
+					fin )
+//--------------------------------------------------------------------------------------------------------//
+
+Type Element = Structure
+	caractère : Caractère
+	motExiste : Booléen
+finstructure
+					( procedure fixerCaractère(E/S a: ArbreNaire , E c : Caractère)
+					début
+						a.e.caractère <- c
+					fin)
+
+//--------------------------------------------------------------------------------------------------------//
+
+fonction dictionnaire():Dictionnaire 
+début 
+	retourner arbreNaire()
+fin 
+
+//--------------------------------------------------------------------------------------------------------//
+
+fonction estVide(d: Dictionnaire): Booléen
+début
+	retourner obtenirCaractère(obtenirArbre(d)) = ''
+fin
+
+//--------------------------------------------------------------------------------------------------------//
+
+fonction estPresent(d:Dictionnaire, m:Mot): Booléen
+déclaration : 
+	trouve, estPresent: Booléen
+	i,j : Naturel
+	l : LC<ArbreNaire>
+	a : ArbreNaire
+
+début
+estPresent <- FAUX
+trouve <- VRAI
+i = 1 
+a <- obtenirArbre(d)
+tant que (non estPresent) et (i <= longueur(m)) et trouve
+	l <- obtenirFils(a)
+	j = 1
+	trouve = FAUX
+	tant que (non trouve) et j <= obtenirNbFils(a)
+		si obtenirIemeCaractère(m,i) = obtenirCaractère(obtenirElementLC(l)) alors
+			trouve = VRAI
+		sinon
+			l <- obtenirListeSuivante(l)
+			j <- j+1
+		finsi
+	fintantque
+	si trouve alors
+		si (i = longueur(m)) et obtenirBooléen(a) alors
+			estPresent <- VRAI
+		finsi 
+		i = i+1
+		a <- obtenirElementLC(l)
+	finsi
+fintantque	
+retourner estPresent	
+fin
+
+//--------------------------------------------------------------------------------------------------------//
+
+procédure ajoutMot(E/S d:Dictionnaire, E m:Mot)
+déclaration : 
+	trouve, motAjouté : Booléen
+	i,j : Naturel
+	l : LC<ArbreNaire>
+	temp : ArbreNaire
+début
+motAjouté <- FAUX
+trouve <- VRAI
+i = 1 
+a <- obtenirArbre(d)
+tant que (non motAjouté) et (i <= longueur(m))
+	l <- obtenirFils(a)
+	j = 1
+	trouve = FAUX
+	tant que (non trouve) et j <= obtenirNbFils(a)
+		si obtenirIemeCaractère(m,i) = obtenirCaractère(obtenirElementLC(l)) alors
+			trouve = VRAI
+		sinon
+			l <- obtenirListeSuivante(l)
+			j <- j+1
+		finsi
+	fintantque
+	si trouve alors
+		si (i = longueur(m)) alors
+			si non obtenirBooleen(a) alors
+				fixerBooleen(a, VRAI)
+			finsi
+			motAjouté <- VRAI
+		finsi 
+		a <- obtenirElementLC(l)
+	sinon 
+		temp <- ArbreNaire()
+		fixerCaractère(temp, obtenirIemeCaractère(m,i))
+		si (i = longueur(m)) alors
+			fixerBooleen(temp, VRAI)
+			motAjouté <- VRAI
+		sinon
+			fixerBooleen(temp, FAUX)
+		finsi
+		fixerFils(a, temp)
+		fixerNbFils(a, obtenirNbFils(a)+1)
+	finsi
+	i = i+1
+fintantque	
+fin
+
+//--------------------------------------------------------------------------------------------------------//
+
+procédure dictionnaireEnFichier(E/S : fdico : fichier E : d : dictionnaire)
+déclarations: 	temp : LC<Arbre N-aire<Element>>
+		a : Arbre N-aire<Element>
+		i : Naturel
+début 
+	a <- obtenirArbre(d)
+	si non estVide(a)
+		écrireCaractère(fdico, obtenirCaractère(a))
+		écrireCaractère(fdico, obtenirBooléen(a))
+		écrireCaractère(fdico, nbFils(a))
+		temp <- obtenirFils(a)
+		pour i allant de 1 à obtenirNbFils(a)
+			dictionnaireEnFichier(fdico, obtenirElement(temp))
+			temp <- obtenirListeSuivante(temp)
+		finpour
+	finsi
+fin
+
+//----------------------------------------------------------------------------------//
+
+procédure fichierEnDictionnaire(E/S d : dictionnaire, fdico : fichier)
+déclaration: 	temp, a : Arbre N-aire<Element>
+		i : Naturel
+début 
+	a <- obtenirArbre(d)
+	si non EOF(fdico)
+		fdico, car <- lireCaractère(fdico)
+		fixerCaractère(a,car)
+		fdico, bool <- lireCaractère(fdico)
+		fixerBooléen(a,bool)
+		fdico, nbFils <- lireCaractère(fdico)
+		fixerNbFils(a,nbFils)
+		temp <- ArbreNaire()
+		Pour i allant de 1 à nbFils 
+			fichierEnDictionnaire(temp, fdico)
+			fixerFils(a,temp)
+		finpour
+	finsi
+fin
+

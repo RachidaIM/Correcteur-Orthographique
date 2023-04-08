@@ -1,0 +1,41 @@
+%\documentclass[11pt,a4paper]{article}
+%\usepackage{algorithmeUTF8}
+%\usepackage{classeRapport}
+
+%\begin{document}
+
+\subsubsection{TAD Mot}
+    \begin{algorithme}
+        \signatureFonctionAvecPreconditions{creerMot}{CdC : \chaine}{Mot}{estUnMot(CdC)}
+        \signatureFonction{longueur}{mot : Mot}{\naturel}
+        \signatureFonction{estUnMot}{CdC : \chaine}{\booleen}
+        \signatureFonctionAvecPreconditions{iemeCaractere}{mot : Mot, i : \naturelNonNul}{\caractere}{i $\leq$ longueur(mot)}
+        \signatureFonctionAvecPreconditions{remplaceLettre}{mot : Mot, c : \caractere, i : \naturelNonNul}{Mot}{i $\leq$ longueur(mot)}
+        \signatureFonctionAvecPreconditions{inverseLettres}{mot : Mot, i : \naturelNonNul}{Mot}{i $<$ longueur(mot)}
+        \signatureFonctionAvecPreconditions{supprimeLettre}{mot : Mot, i : \naturelNonNul}{Mot}{longueur(mot) $\geq$ 2 et i $\leq$ longueur(mot)}
+        \signatureFonctionAvecPreconditions{insereLettre}{mot : Mot, c : \caractere, i : \naturelNonNul}{Mot}{i $\leq$ longueur(mot)+1 et estUnCaractereValide(c)}
+        \signatureFonctionAvecPreconditions{decomposeMot}{mot : Mot, i : \naturelNonNul}{Mot, Mot}{longueur(mot) $\geq$ 2 et i $\leq$ longueur(mot)-1}
+        \signatureFonction{estUnCaractereValide}{c : \caractere}{\booleen}
+\end{algorithme}
+
+\subsubsection{TAD Dictionnaire}
+    \begin{algorithme}
+        \signatureFonction{creerDictionnaire}{}{Dictionnaire}
+        \signatureFonction{estVide}{dico : Dictionnaire}{\booleen}
+        \signatureProcedure{ajouteMot}{\paramEntreeSortie{dico : Dictionnaire}, \paramEntree{mot : Mot}}
+        \signatureFonctionAvecPreconditions{estPresent}{dico : Dictionnaire, mot : Mot}{\booleen}{non estVide(dico)}
+        \signatureProcedureAvecPreconditions{dictionnaireEnFichier}{\paramEntreeSortie{fdico : Fichier}, \paramEntree{dico : Dictionnaire}}{estOuvert(fdico)}
+        \signatureProcedureAvecPreconditions{fichierEnDictionnaire}{\paramEntreeSortie{dico : Dictionnaire}, \paramEntree{fdico : Fichier}}{estOuvert(fdico)}
+    \end{algorithme}
+
+\subsubsection{TAD Correcteur Orthographique}
+    \begin{algorithme}
+        \signatureFonction{creerCorrecteur}{dico : Dictionnaire}{Correcteur Orthographique}
+        \signatureProcedureAvecPreconditions{corrigeParInversion}{mot : Mot, corr : Correcteur Orthographique}{longueur(mot) $\geq$ 2}
+        \signatureProcedure{corrigeParInsertion}{\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}
+        \signatureProcedureAvecPreconditions{corrigeParDecomposition}{\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}{longueur(mot) $\geq$ 2}
+        \signatureProcedureAvecPreconditions{corrigeParSuppression}{\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}{longueur(mot) $\geq$ 2}
+        \signatureProcedureAvecPreconditions{corrigeParRemplacement}{\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}{longueur(mot) $\geq$ 2}
+    \end{algorithme}
+
+%\end{document}

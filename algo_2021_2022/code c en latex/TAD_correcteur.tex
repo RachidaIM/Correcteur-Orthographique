@@ -1,0 +1,173 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+ 
+\definecolor{darkWhite}{rgb}{0.94,0.94,0.94}
+ 
+\lstset{
+  aboveskip=3mm,
+  belowskip=-2mm,
+  backgroundcolor=\color{darkWhite},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  commentstyle=\color{red},
+  deletekeywords={...},
+  escapeinside={\%*}{*)},
+  extendedchars=true,
+  framexleftmargin=16pt,
+  framextopmargin=3pt,
+  framexbottommargin=6pt,
+  frame=tb,
+  keepspaces=true,
+  keywordstyle=\color{blue},
+  language=C,
+  literate=
+  {²}{{\textsuperscript{2}}}1
+  {⁴}{{\textsuperscript{4}}}1
+  {⁶}{{\textsuperscript{6}}}1
+  {⁸}{{\textsuperscript{8}}}1
+  {€}{{\euro{}}}1
+  {é}{{\'e}}1
+  {è}{{\`{e}}}1
+  {ê}{{\^{e}}}1
+  {ë}{{\¨{e}}}1
+  {É}{{\'{E}}}1
+  {Ê}{{\^{E}}}1
+  {û}{{\^{u}}}1
+  {ù}{{\`{u}}}1
+  {â}{{\^{a}}}1
+  {à}{{\`{a}}}1
+  {á}{{\'{a}}}1
+  {ã}{{\~{a}}}1
+  {Á}{{\'{A}}}1
+  {Â}{{\^{A}}}1
+  {Ã}{{\~{A}}}1
+  {ç}{{\c{c}}}1
+  {Ç}{{\c{C}}}1
+  {õ}{{\~{o}}}1
+  {ó}{{\'{o}}}1
+  {ô}{{\^{o}}}1
+  {Õ}{{\~{O}}}1
+  {Ó}{{\'{O}}}1
+  {Ô}{{\^{O}}}1
+  {î}{{\^{i}}}1
+  {Î}{{\^{I}}}1
+  {í}{{\'{i}}}1
+  {Í}{{\~{Í}}}1,
+  morekeywords={*,...},
+  numbers=left,
+  numbersep=10pt,
+  numberstyle=\tiny\color{black},
+  rulecolor=\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  stringstyle=\color{gray},
+  tabsize=4,
+  title=\lstname,
+}
+ 
+\begin{document}
+ 
+\begin{lstlisting}
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include "TAD_Mot.h"
+#include "TAD_Dictionnaire.h"
+#include "TAD_Correcteur.h"
+#include <stdbool.h>
+#include <errno.h>
+
+void creerCorrecteur(Dictionnaire d){
+    CorrecteurOrthographique Correcteur ;
+    Correcteur.dictionnaire=d;
+    //Mot Correcteur.corrections[] ;
+} 
+
+bool estPresentDansDictionnaire(Mot m ,CorrecteurOrthographique c ){
+    return estPresent(c.dictionnaire,m);
+}
+
+void ajouterCorrection(CorrecteurOrthographique c , Mot m ){
+        ajouter(c.corrections,m);
+}
+
+void  CorrectionParInversion(Mot mot,CorrecteurOrthographique c){
+    unsigned  int  i;
+    Mot testMot;
+    for (i=1;i<longueur(mot)-1;i++){
+        testMot= inverseLettres(mot, i);
+        if (estPresentDansDictionnaire(testMot, c)){
+            ajouterCorrection(c, testMot);
+        }
+    }
+}
+
+
+void  CorrectionParDecomposition(Mot mot ,CorrecteurOrthographique c ){
+    unsigned  int  i;
+    Mot testMot1, testMot2;
+    for (i=1;i< longueur(mot)-1;i++){
+        decomposeMot( mot,i);
+        if (estPresentDansDictionnaire(testMot1, c)){
+            ajouterCorrection(c, testMot1);
+        }
+        else {
+            if (estPresentDansDictionnaire(testMot2, c)){
+                ajouterCorrection(c, testMot2);
+
+            }
+        }
+    }
+}
+
+void CorrectionParSuppression(Mot mot ,CorrecteurOrthographique c ){
+    unsigned int i;
+    Mot testMot;
+    for(i=1;i<longueur(mot);i++){
+        testMot=supprimeLettre(mot,i);
+        ajouterCorrection(c,testMot);
+    }
+}
+
+
+void  CorrectionParInsertion(Mot mot ,CorrecteurOrthographique c ){
+    unsigned int i,j;
+    Mot testMot;
+    for(i=1;i<longueur(mot )+1;i++){
+        for (j=1 ;j<26;i++){
+            testMot = insereLettre(mot ,(char) j,i);
+            if (estPresentDansDictionnaire(testMot,c)){
+                ajouterCorrection(c, testMot);
+            }
+        }
+    }
+}
+
+void  CorrectionParRemplacement(Mot mot ,CorrecteurOrthographique c){
+    unsigned i,j;
+    Mot testMot;
+    for (i=1;i<longueur(mot);i++){
+        for (j=1;j<26;i++){
+            testMot = remplaceLettre(mot ,(char) j,i);
+            if(estPresentDansDictionnaire(testMot, c)){
+                ajouterCorrection(c, testMot);
+            }
+        }
+    }
+}
+
+\end{lstlisting}
+ 
+\end{document}

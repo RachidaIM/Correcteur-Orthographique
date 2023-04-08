@@ -1,0 +1,266 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+ 
+\definecolor{darkWhite}{rgb}{0.94,0.94,0.94}
+ 
+\lstset{
+  aboveskip=3mm,
+  belowskip=-2mm,
+  backgroundcolor=\color{darkWhite},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  commentstyle=\color{red},
+  deletekeywords={...},
+  escapeinside={\%*}{*)},
+  extendedchars=true,
+  framexleftmargin=16pt,
+  framextopmargin=3pt,
+  framexbottommargin=6pt,
+  frame=tb,
+  keepspaces=true,
+  keywordstyle=\color{blue},
+  language=C,
+  literate=
+  {²}{{\textsuperscript{2}}}1
+  {⁴}{{\textsuperscript{4}}}1
+  {⁶}{{\textsuperscript{6}}}1
+  {⁸}{{\textsuperscript{8}}}1
+  {€}{{\euro{}}}1
+  {é}{{\'e}}1
+  {è}{{\`{e}}}1
+  {ê}{{\^{e}}}1
+  {ë}{{\¨{e}}}1
+  {É}{{\'{E}}}1
+  {Ê}{{\^{E}}}1
+  {û}{{\^{u}}}1
+  {ù}{{\`{u}}}1
+  {â}{{\^{a}}}1
+  {à}{{\`{a}}}1
+  {á}{{\'{a}}}1
+  {ã}{{\~{a}}}1
+  {Á}{{\'{A}}}1
+  {Â}{{\^{A}}}1
+  {Ã}{{\~{A}}}1
+  {ç}{{\c{c}}}1
+  {Ç}{{\c{C}}}1
+  {õ}{{\~{o}}}1
+  {ó}{{\'{o}}}1
+  {ô}{{\^{o}}}1
+  {Õ}{{\~{O}}}1
+  {Ó}{{\'{O}}}1
+  {Ô}{{\^{O}}}1
+  {î}{{\^{i}}}1
+  {Î}{{\^{I}}}1
+  {í}{{\'{i}}}1
+  {Í}{{\~{Í}}}1,
+  morekeywords={*,...},
+  numbers=left,
+  numbersep=10pt,
+  numberstyle=\tiny\color{black},
+  rulecolor=\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  stringstyle=\color{gray},
+  tabsize=4,
+  title=\lstname,
+}
+ 
+\begin{document}
+ 
+\begin{lstlisting}
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "TAD_Dictionnaire.h"
+#include "listeChainee.h"
+#include "elementsArbreNaire.h"
+
+
+// Setter : 
+void fixerBooleen(Element arbre, bool Booleen){
+    arbre->estFinDeMot = Booleen;
+}
+void fixerCaractere(Element arbre, char c){
+    arbre->caractere = c;
+}
+
+void fixerNbFils(Element arbre, int Nb){
+    arbre->nbFils = Nb;
+}
+
+void fixerFils(Element a, Element b){
+    LC_ajouter(a->fils,b,EAN_copierElement);
+}
+// Fin des Setter
+
+// Getter
+bool obtenirBooleen(Element arbre){
+    return arbre->estFinDeMot;
+}
+char obtenirCaractere(Element arbre){
+    return arbre->caractere;
+}
+
+int obtenirNbFils(Element arbre){
+    return arbre->nbFils;
+}
+
+Element obtenirArbre(Dictionnaire d){
+    return d;
+}
+
+LC_ListeChainee obtenirFils(Element arbre){
+    return arbre->fils;
+}
+
+// Fin des Getter
+
+Element arbreNAire(){
+  Element a;
+  fixerBooleen(a, false);
+  fixerCaractere(a, ' ');
+  fixerNbFils(a,0); 
+  a->fils = LC_listeChainee();
+  return a;
+}
+
+Dictionnaire dictionnaire(){
+    return arbreNAire();
+}
+
+bool estVide(Dictionnaire d){
+    return (obtenirCaractere(obtenirArbre(d)) == ' ');
+}
+
+bool estPresent(Dictionnaire d, Mot m){
+    bool trouve, estPresent;
+    int i,j;
+    LC_ListeChainee l;
+    Element a;
+    estPresent = false;
+    trouve = true;
+    i = 1;
+    a = obtenirArbre(d);
+    while ((!estPresent) || (i <= longueur(m) || trouve)){
+        l = obtenirFils(a); // Fonction Liste Chainee
+        j = 1;
+        trouve = false;
+        while (!trouve || (j <= obtenirNbFils(a))){
+            if (iemeCaractere(m,i) == obtenirCaractere(LC_obtenirElement(l))) {
+                trouve = true;
+            }
+            else {
+                l = LC_obtenirListeSuivante(l);
+                j = j+1;
+            }
+        }
+        if (trouve) {
+            if ((i == longueur(m)) || obtenirBooleen(a)){
+                estPresent = true;
+            }
+            i = i+1;
+            a = LC_obtenirElement(l);
+        }
+    }
+    return estPresent;
+}
+
+void ajoutMot(Dictionnaire d, Mot m){
+    bool trouve, motAjoute;
+    int i,j;
+    LC_ListeChainee l;
+    Element temp,a;
+    motAjoute = false;
+    trouve = true;
+    i = 1;
+    a = obtenirArbre(d);
+    while (!motAjoute || (i <= longueur(m))) {
+        l = obtenirFils(a);
+        j = 1;
+        trouve = false;
+        while(!trouve || (j <= obtenirNbFils(a))) {
+            if (iemeCaractere(m,i) == obtenirCaractere(LC_obtenirElement(l))) {
+                trouve = true;
+            }
+            else {
+                l = LC_obtenirListeSuivante(l);
+                j = j+1;
+            }
+        }
+        if (trouve) {
+            if (i == longueur(m)) {
+                if (!obtenirBooleen(a)) {
+                    fixerBooleen(a,true);
+                }
+                motAjoute = true;
+            }
+            a = LC_obtenirElement(l);
+        }
+        else {
+            temp = arbreNAire();
+            fixerCaractere(temp,iemeCaractere(m,i));
+            if (i == longueur(m)) {
+                fixerBooleen(temp, true);
+                motAjoute = true;
+            }
+            else {
+                fixerBooleen(temp, false);
+            }
+            fixerFils(a,temp); // fixerFils(a,temp)
+            fixerNbFils(a, obtenirNbFils(a)+1);
+        }
+        i = i+1;
+    }
+}
+ 
+void dictionnaireEnFichier(FILE* fdico, Dictionnaire d){
+    Element a;
+    LC_ListeChainee temp;
+    a = obtenirArbre(d);
+    if (!(estVide(a))) {
+        fprintf(fdico,"%c",obtenirCaractere(a));
+		fprintf(fdico,"%d",obtenirBooleen(a));
+		fprintf(fdico,"%d",obtenirNbFils(a));
+		temp = obtenirFils(a);
+        for (int i=1;i<=obtenirNbFils(a);i++) {
+            dictionnaireEnFichier(fdico, LC_obtenirElement(temp));
+			temp = LC_obtenirListeSuivante(temp);
+        }
+    }
+}
+
+void fichierEnDictionnaire(Dictionnaire d, FILE* fdico){
+    Element temp,a;
+    bool booleen;
+    char car;
+    int i,nbFils;
+    a = EAN_copierElement(d); // obtenirArbre(d)
+    if (fgetc(fdico) != EOF) {
+        car = fgetc(fdico);
+		fixerCaractere(a,car);
+		booleen = fgetc(fdico);
+		fixerBooleen(a,booleen);
+		nbFils = fgetc(fdico);
+		fixerNbFils(a,nbFils);
+		temp = arbreNAire(); // 
+        for (i=1;i<=nbFils;i++) {
+            fichierEnDictionnaire(temp, fdico);
+			fixerFils(a,temp);
+        }
+    }
+}
+
+\end{lstlisting}
+ 
+\end{document}

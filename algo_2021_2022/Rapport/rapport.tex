@@ -1,0 +1,72 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{classeRapport}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{listingsutf8}
+\usepackage{algorithmeUTF8}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{color}
+\usepackage[table]{xcolor}
+
+\begin{document}
+
+\PageDeGarde
+{rien.png} % image sur la page de garde
+{Projet d'Algorithmique} % titre principal
+{Correcteur Orthographique} % sous-titre
+{Cièle \textsc{Gillet}\\
+Rachida \textsc{Imandou}\\
+Victor \textsc{Léger}\\
+Marilou \textsc{Pascal}} % nom
+{Algorithmique Avancée et Programmation C - ITI - 2021/2022} % bas de page
+
+\Page{INSALogo}{rien.png} % logo de bas de page (en bas a droite)
+
+\tableofcontents
+\newpage
+\section{Introduction}
+    \input{intro.tex}
+\newpage
+\section{Analyse du problème}
+    \subsection{Cahier des Charges}
+    	\input{cahierDesCharges.tex}
+    \subsection{Types Abstraits de Données (TAD)}
+        \input{TADbien.tex}
+    \subsection{Analyse descendante}
+    	\input{analyseDescendante.tex}
+\newpage
+\section{Conception préliminaire}
+    \subsection{Signature des procédures et fonctions issues des TAD}
+        \input{signaturesTAD.tex}
+    \subsection{Signature des procédures et fonctions issues de l'analyse}
+        \input{signaturesAnalyse.tex}
+\newpage
+\section{Conception détaillée}
+    \subsection{Conception détaillée des fonctions issues des TAD}
+    	\input{conceptionDetailleeTAD.tex}
+    \subsection{Conception détaillée des fonctions issues de l'analyse descendante}
+        \input{conceptionDetailleeAD.tex}
+\newpage
+\section{Code C et tests unitaires}
+    \input{passageCDdev.tex}
+    \subsection{Code C}
+       \input{CodeC.tex}
+    \subsection{Tests unitaires}
+        \input{TestsUnitaires.tex}
+\newpage
+\section{Conclusion}
+    \subsection{Conclusions par membres}
+        \subsubsection{Victor Léger (chef de projet)}
+            \input{concluVictor.tex}
+        \subsubsection{Cièle Gillet}
+            \input{concluCiele.tex}
+        \subsubsection{Rachida Imandou}
+            \input{concluRachida.tex}
+        \subsubsection{Marilou Pascal}
+            \input{concluMarilou.tex}
+
+    \subsection{Conclusion générale}
+        \input{concluGenerale.tex}
+\end{document}

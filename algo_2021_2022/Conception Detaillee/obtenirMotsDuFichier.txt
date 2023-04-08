@@ -1,0 +1,14 @@
+fonction obtenirMotsDuFichier(fichier : Fichier) : Ensemble<Mot> //du coup probablement un tableau de Mot mais jsp comment tu l'as mis dans les autres conceptions détaillées
+
+début
+	mots : Ensemble<Mot>
+	mot : Mot
+	s : Chaîne de Caractères
+	tant que (non finFichier(fichier))
+	     fichier,s <- lireChaine(fichier)
+	     s <- minuscule(s)
+	     mot = creerMot(s)
+	     ajouterALEnsemble(mots, mot)
+	fintantque
+	retourner mots
+fin

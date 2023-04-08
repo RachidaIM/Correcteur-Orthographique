@@ -1,0 +1,18 @@
+NOM:  CorrecteurOrthographique
+
+UTILISE: Mot, Dictionnaire
+
+OPERATIONS:    correcteur:      		Dictionnaire --> CorrecteurOrthographique
+		correctionParInversion:        Mot x CorrecteurOrthographique -/-> CorrecteurOrthographique
+		correctionParRemplacement:     Mot x CorrecteurOrthographique --> CorrecteurOrthographique
+		correctionParInsertion:	Mot x CorrecteurOrthographique --> CorrecteurOrthographique
+		correctionParSuppression:	Mot x CorrecteurOrthographique -/-> CorrecteurOrthographique
+		correctionParDecomposition:	Mot x CorrecteurOrthographique -/-> CorrecteurOrthographique
+		
+AXIOMES:	
+
+PRECONDITIONS: correctionParInversion(mot):	Mot.longueur(Mot) > 1
+		correctionParSuppression:	Mot.longueur(Mot) > 1
+		correctionParDecomposition:	Mot.longueur(Mot) > 1
+		
+//!!\\ Remarque :  comment faire appel aux fonctions d'un autre TAD dans un TAD

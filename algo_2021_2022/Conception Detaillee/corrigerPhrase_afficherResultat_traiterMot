@@ -1,0 +1,40 @@
+il faudra modifier traiter Mot en C, ça permettra de faire corrigerPhrase plus facilement
+
+procedure corrigerPhrase(s : Chaîne de Caractères, fichierdico : Fichier)
+déclaration
+	d : Dictionnaire
+	motsACorriger, corrections : Tableau de Mots
+	i : NNN
+debut
+	d <- fichierEnDictionnaire(fichierDico)
+	motsACorriger <- decouperTexteEnMots(s)
+	pour i allant de 1 à longueur(motsACorriger)
+		si estPresent(d, motsACorriger[i]) alors //(ou estCorrect, comme tu veux j'ai pas trop compris pourquoi tu avais créé cette fonction au lieu d'utiliser estPresent)
+		   ecrireAvecRetourALaLigne("*")
+		sinon
+			corrections <- traiterMot(d, motsACorriger[i])
+			afficherCorrections(corrections, motsACorriger[i])
+		finsi
+	finpour
+fin
+
+
+fonction traiterMot(dico : DIctionnaire, mot : Mot) : Tableau de Mots
+declaration
+	corr : CorrecteurOrthographique
+debut
+	corr = correcteur(dico)
+	proposerCorrections(corr, mot)
+	retourner obtenirCorrections(corr)
+fin
+
+
+procédure afficherCorrections(corrections : Tableau de Mots, motACorriger: Mot)
+déclaration
+	i : NNN
+debut
+	écrire("& ", obtenirData(motACorriger)," ", longueur(corrections), " ",positionDuMot)//je sais pas du tout comment gérer la position du mot ça m'a l'air grave complexe il faut avoir celle depuis le début de la saisie, pas que depuis le début de la phrase
+	pour i allant de 1 à longueur(corrections)
+	     écrire(corrections[i], " ")
+	finpour
+fin

@@ -1,0 +1,11 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[english,francais]{babel}
+\title{conclusion}
+\begin{document}
+\section{Rachida imandou }
+C'est la première fois que j'avais à réaliser un projet en C, ce projet m'a permis de mettre en pratique les cours théoriques sur le C, j'ai donc pu en comprendre le fonctionnement et découvrir les avantages et inconvénients de son utilisation : la gestion de la mémoire, les pointeurs, la compilation … et aussi j’ai familiarisé avec l’outil git et latex.
+\newline
+Ce projet était une bonne occasion d'expérimenter le travail en équipe avec un cahier de charges, cette méthode m’a permis d’améliorer mes capacités d’adaptation avec différentes contraintes. 
+
+\end{document}

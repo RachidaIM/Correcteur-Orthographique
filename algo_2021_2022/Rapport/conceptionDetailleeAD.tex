@@ -1,0 +1,69 @@
+\subsubsection{AD0}
+	\begin{algorithme}
+        \procedure{corrigerPhrase}%
+        {\paramEntree{phraseACorriger : \chaine, fdico : Fichier}}%
+        {dico : Dictionnaire, mot : Mot, motsACorriger, corrections : Ensemble <Mot>, i : \naturelNonNul}%
+        {\affecter{dico}{fichierEnDictionnaire(fdico)}
+        \affecter{motsACorriger}{decouperTexteEnMots(phraseACorriger)}
+        \pourChaque{mot}{motsACorriger}%
+        	{\sialorssinon{estPresent(dico, mot)}%
+    	        {\ecrire{"*"}}%
+        	    {\affecter{corrections}{traiterMot(dico, mot)}
+            	\instruction{afficherCorrections(mot, corrections)}
+            	}
+            }%
+        }\\
+    \end{algorithme}
+
+\subsubsection{AD1}
+    \begin{algorithme}
+        \fonction{decouperTexteEnMots}%
+        {phraseACorriger : \chaine}%
+        {Ensemble <Mot>}%
+        {ens : Ensemble <Mot>, i : \naturelNonNul, temp : \chaine}%
+        {\affecter{temp}{""}
+        \pour{i}{1}{longueur(phraseACorriger)}{}%
+            {\tantque{iemeCaractere(phraseACorriger, i) $\neq$ " "}%
+                {\affecter{temp}{temp $+$ iemeCaractere(phraseACorriger, i)}}
+            \instruction{ajouter(ens, creerMot(temp))}
+            \affecter{temp}{""}
+            }
+        \retourner{ens}
+        }\\
+        
+        \fonction{traiterMot}%
+        {dico : Dictionnaire, mot : Mot}%
+        {\booleen, Ensemble <Mot>}%
+        {corr : Correcteur}%
+        {\sialorssinon{estPresent(dico, mot)}
+            {\retourner{VRAI, ensemble()}}
+            {\affecter{corr}{creerCorrecteur(dico)}%
+            \instruction{proposerCorrections(corr, mot)}%
+            \retourner{FAUX, obtenirCorrections(corr)}}
+        }\\
+
+        \procedure{proposerCorrections}%
+        {\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{motACorriger : Mot}}%
+        {}%
+        {\instruction{corrigeParInvertion(corr, motACorriger)}
+        \instruction{corrigeParInsertion(corr, motACorriger)}
+        \instruction{corrigeParDecomposition(corr, motACorriger)}
+        \instruction{corrigeParSuppression(corr, motACorriger)}
+        \instruction{corrigeParRemplacement(corr, motACorriger)}}
+    \end{algorithme}
+
+\subsubsection{AD2}
+\begin{algorithme}    
+    \fonction{obtenirMotsDuFichier}%
+    {fichier : Fichier}%
+    {Ensemble <Mot>}%
+    {ensembleMots : Ensemble <Mot>, mot : Mot, CdC : \chaine}%
+    {\tantque{non finFichier(fichier)}
+        {\affecter{fichier, CdC}{lireChaine(fichier)}
+        \affecter{CdC}{minuscule(CdC)}
+        \affecter{mot}{creerMot(CdC)}
+        \instruction{ajouter(ensembleMots, mot)}
+        }
+    \retourner{ensembleMots}
+    }
+\end{algorithme}

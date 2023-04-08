@@ -1,0 +1,18 @@
+Nom :			Dictionnaire
+
+Utilise :		Booleen, Mot, fichier
+
+Opérations :		dictionnaire :		→ Dictionnaire
+			ajoutMot :		Dictionnaire × Mot → Dictionnaire
+			estVide :		Dictionnaire → Booleen
+			estPresent :		Dictionnaire × Mot -/-> Booleen
+			fichierEnDictionnaire: Fichier --> Dictionnaire
+			DictionnaireEnFichier:	Dictionnaire --> fichier 
+			
+Axiomes :		ajoutMot :		ajoutMot(ajoutMot(D, Ecriture, mot), Ecriture, mot)= ajoutMot(D, Ecriture, mot)
+
+			estVide :		estVide(dictionnaire(), Lecture)
+			estPresent :		estPresent(ajoutMot(D, Ecriture, mot), Lecture, mot)
+			
+Préconditions :		estPresent(D, mot)  :	non estVide(D)
+

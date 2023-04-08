@@ -1,0 +1,25 @@
+
+NOM:	 Mot
+
+Utilise : Caractère, Chaîne de caracteres, Booleen, Naturel
+
+Opérations :   créerMot	     Chaîne de Caractères -/-> Mot
+		longueur: 	     Mot --> Naturel
+		estUnMot:	     Mot --> Booleen
+		iemeCaractere:      Mot x Naturel -/-> Caractère
+		remplacerLettre:    Mot x Caractère x Naturel -/-> Mot
+		inversionLettres:   Mot x Naturel -/-> Mot
+		suppressionLettre:  Mot x Naturel -/-> Mot  
+		insertionLettre:    Mot x Caractère x Naturel -/-> Mot	
+		decomposerMot:      Mot x Naturel -/->  Mot x Mot
+		
+Axiomes:	estUnMot('') = Faux
+		inversionLettres(inversionLettres(mot,n),n) = mot
+		
+Préconditions: inversionLettres(mot, n1):      longueur(mot)>1 et n1<=longueur(mot)
+		suppressionLettre(mot, n):        longueur(mot)>1 et n <= longueur(mot)
+		remplacerLettre(mot,l,n):         n <= longueur(mot)
+		insertionLettre(mot,l,n):         n <= longueur(mot)+1
+		iemeCaractere(mot,n):     	   n <= longueur(mot)
+		decomposerMot: 		   longueur(mot)>1 et n <= longueur(mot)
+		créerMot(Cdc):                    estUnMot(Cdc)

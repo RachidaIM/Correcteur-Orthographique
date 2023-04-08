@@ -1,0 +1,31 @@
+%\documentclass[11pt,a4paper]{article}
+%\usepackage{algorithmeUTF8}
+%\usepackage{classeRapport}
+
+%\begin{document}
+
+\subsubsection{AD0}
+\begin{algorithme}
+    \signatureProcedure{itispell}{}
+    \signatureProcedure{corrigerPhrase}{phraseACorriger : \chaine, fdico : Fichier}
+    \signatureProcedure{aide}{}
+    \signatureProcedure{afficherAide}{}
+    \signatureProcedure{completerDico}{fichierMots : Fichier, fdico : Fichier}
+\end{algorithme}
+
+\subsubsection{AD1}
+\begin{algorithme}
+    \signatureFonction{decouperTexteEnMots}{phraseACorriger : \chaine}{Ensemble <Mot>}
+    \signatureFonction{traiterMot}{dico : Dictionnaire, mot : Mot}{\booleen, Ensemble <Mot>}
+    \signatureProcedure{afficherCorrections}{\paramEntree{Ensemble <Mot>}}
+    \signatureProcedure{proposerCorrections}{\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{motACorriger : Mot}}
+\end{algorithme}
+
+\subsubsection{AD2}
+\begin{algorithme}
+    \signatureFonction{completerDictionnaire}{fdico, fmots : Fichier}{Dictionnaire} %pas convaincue
+    \signatureFonction{obtenirMotsDuFichier}{fichier : Fichier}{Ensemble <Mot>}
+\end{algorithme}
+
+
+%\end{document}

@@ -1,0 +1,8 @@
+Le programme que nous avons dû réaliser avait un cahier des charges déjà défini, il devait présenter, au lancement, les fonctionnalités suivantes :
+\begin{enumerate}
+	\item aider : obtenu lorsque le programme est lancé sans option ou avec l'option -h, affiche une aide concernant l'utilisation du programme
+	\item compléter un dictionnaire : obtenu avec les options -d dico -f fic, permet de compléter ou créer un fichier dictionnaire(dico) avec les mots contenus dans un fichier texte donné (fic)
+	\item corriger un texte : obtenu avec l'option -d dico, permet de proposer des corrections de l'entrée standard en fonction des mots contenus dans le dictionnaire. 
+\end{enumerate}
+
+Pour la correction d'un texte, il fallait que le programme propose, pour chaque mot non présent dans le dictionnaire donné, une liste de corrections possibles composé de mots ressemblants et présents dans le dictionnaire. Pour trouver cette liste, la stratégie la plus simple consiste  à faire des opérations sur le mot (insertion, remplacement ou encore inversion de lettres) et à vérifier la présence du mot obtenu ainsi dans le dictionnaire. C'est cela que nous avons essayé de faire dans notre projet. 

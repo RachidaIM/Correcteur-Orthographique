@@ -1,0 +1,326 @@
+%\documentclass[11pt,a4paper]{article}
+%\usepackage{algorithmeUTF8}
+%\usepackage{classeRapport}
+
+%\begin{document}
+
+\subsubsection{TAD Mot}
+	\begin{algorithme}
+		\begin{enregistrement}{Mot}
+			\champEnregistrement{data}{\chaine}
+			\champEnregistrement{longueur}{\naturel}
+		\end{enregistrement}\\
+
+		\fonctionAvecPreconditions{creerMot}%
+		{CdC : \chaine}%
+		{Mot}%
+		{estUnMot(CdC)}%
+		{mot : Mot}%
+		{\affecter{mot.data}{CdC}
+		\affecter{mot.longueur}{longueurChaine(CdC)}
+		\retourner{mot}
+		}\\
+		
+        \fonction{estUnMot}%
+        {mot : Mot}%
+        {\booleen}%
+        {resultat : \booleen, i : \naturelNonNul}%
+        {\affecter{resultat}{VRAI}%
+        \affecter{i}{1}%
+        \tantque%
+        	{resultat et i $\leq$ longueur(mot)}%
+        	{\affecter{i}{i+1}%
+        	\affecter{resultat}{estUnCaractereValide(iemeCaractere(mot, i))}
+        	}
+        \retourner{resultat}
+        }\\
+		
+        \fonctionAvecPreconditions{remplaceLettre}%
+        {mot : Mot, c : \caractere, i : \naturelNonNul}%
+		{Mot}%
+        {i $\leq$ longueur(mot)}%
+        {testMot : Mot}%
+		{\affecter{testMot}{copieMot(mot)}%
+		\instruction{modifieiemeCaractere(testMot, c, i)}%
+		\retourner{testMot}}\\
+        
+        \fonctionAvecPreconditions{inverseLettres}%
+        {mot : Mot, i : \naturelNonNul}%
+		{Mot}%
+        {i $<$ longueur(mot)}%
+        {testMot : Mot, c1, c2 : \caractere}%
+        {\affecter{testMot}{copieMot(mot)}%
+		\affecter{c1}{obtenirIemeCaractere(testMot, i)}%
+		\affecter{c2}{obtenirIemeCaractere(testMot, i $+$ 1)}%
+		\instruction{echanger(c1, c2)}%
+		\retourner{testMot}}\\
+        
+        \fonctionAvecPreconditions{supprimeLettre}%
+        {mot : Mot, i : \naturelNonNul}%
+		{Mot}%
+        {longueur(mot) $\geq$ 2 et i $\leq$ longueur(mot)}%
+        {data, dataTest : \chaine, j : \naturelNonNul, testMot : Mot}%
+        {\affecter{data}{obtenirData(mot)}%
+		\affecter{dataTest}{""}%
+		\pour{j}{1}{longueur(mot)}{}%
+			{\sialors{j $\neq$ i}%
+				{\instruction{ajouteriemeCaractere(dataTest, data, j)}}
+			}
+		\affecter{testMot}{creerMot(dataTest)}%
+		\retourner{testMot}}\\
+        
+        \fonctionAvecPreconditions{insereLettre}%
+        {mot : Mot, c : \caractere, i : \naturelNonNul}%
+		{Mot}%
+        {i $\leq$ longueur(mot)+1 et estUnCaractereValide(c)}%
+        {data, dataTest : \chaine, j : \naturelNonNul, testMot : Mot}%
+        {\affecter{data}{obtenirData(mot)}%
+		\affecter{dataTest}{""}%
+		\pour{j}{1}{longueur(mot)}{}%
+			{\sialors{j $=$ i}%
+				{\instruction{ajouterCaractere(dataTest, c)}}%
+			\instruction{ajouteriemeCaractere(dataTest, data, j)}
+			}%
+		\affecter{testMot}{creerMot(dataTest)}%
+		\retourner{testMot}}\\
+        
+        \fonctionAvecPreconditions{decomposeMot}%
+        {mot : Mot, i : \naturelNonNul}%
+        {Mot, Mot}%
+        {longueur(mot) $\geq$ 2 et i $\leq$ longueur(mot)-1}%
+        {dataTest, dataTest1, dataTest2 : \chaine, j : \naturelNonNul, testMot1, testMot2 : Mot}%
+        {\affecter{data}{obtenirData(mot)}%
+		\affecter{dataTest1}{""}%
+		\affecter{dataTest2}{""}%
+		\pour{j}{1}{i $-$ 1}{}%
+			{\instruction{ajouteriemeCaractere(dataTest1, data, j)}}%
+		\pour{j}{i}{longueur(mot)}{}%
+			{\instruction{ajouteriemeCaractere(dataTest2, data, j)}}%
+		\affecter{testMot1}{creerMot(dataTest1)}%
+		\affecter{testMot2}{creerMot(dataTest2)}%
+		\retourner{testMot1, testMot2}}
+	\end{algorithme}
+
+\subsubsection{TAD Dictionnaire}
+	\begin{algorithme}
+		\begin{enregistrement}{Dictionnaire}
+			\champEnregistrement{dico}{ArbreNaire}
+		\end{enregistrement}\\
+		
+		\begin{enregistrement}{ArbreNaire}
+			\champEnregistrement{e}{Element}
+			\champEnregistrement{fils}{Liste Chainee <Dictionnaire>}
+			\champEnregistrement{nbFils}{\naturel}
+		\end{enregistrement}\\
+		
+		\begin{enregistrement}{Element}
+			\champEnregistrement{caractere}{\caractere}
+			\champEnregistrement{motExiste}{\booleen}
+		\end{enregistrement}\\
+		
+		\fonction{dictionnaire}%
+		{}%
+		{Dictionnaire}%
+		{}%
+		{\retourner{arbreNaire()}}\\
+		
+		\fonction{estVide}%
+		{dico : Dictionnaire}%
+		{\booleen}%
+		{}%
+		{\retourner{obtenirCaractere(obtenirArbre(dico)) $=$ ""}}\\
+		
+		\fonctionAvecPreconditions{estPresent}%
+		{dico : Dictionnaire, mot : Mot}%
+		{\booleen}%
+		{non estVide(dico)}
+		{trouve, estPresent : \booleen, i, j : \naturel, l : Liste Chainee <ArbreNaire>, a : ArbreNaire}%
+		{\affecter{estPresent}{FAUX}%
+		\affecter{trouve}{VRAI}%
+		\affecter{i}{1}%
+		\affecter{a}{obtenirArbre(dico)}
+		\tantque%
+			{non trouve et j $\leq$ obtenirNbFils(a)}%
+			{\sialorssinon%
+				{obtenirIemeCaractere(mot, i) $=$ obtenirCaractere(obtenirElementLC)}
+				{\affecter{trouver}{VRAI}}
+				{\affecter{l}{obtenirListeSuivante(l)}
+				\affecter{j}{j+1}}
+			}%
+		\sialors%
+			{trouve}
+			{\sialors%
+				{(i $=$ longueur(mot)) et obtenirBooleen(a)}
+				{\affecter{estPresent}{VRAI}}
+			\affecter{i}{i+1}
+			\affecter{a}{obtenirElementLC(l)}
+			}
+		}\\
+		
+		\procedure{ajouteMot}%
+		{\paramEntreeSortie{dico : Dictionnaire}, \paramEntree{mot : Mot}}%
+		{trouve, motAjoute : \booleen, i, j : \naturelNonNul, l : Liste Chainee <ArbreNaire>, temp : ArbreNaire}
+		{\affecter{motAjoute}{FAUX}%
+		\affecter{trouve}{VRAI}%
+		\affecter{i}{1}%
+		\affecter{a}{obtenirArbre(dico)}%
+		\tantque%
+			{non motAjoute et i $\leq$ longueur(mot)}%
+			{\affecter{l}{obtenirFils(a)}%
+			\affecter{j}{1}%
+			\affecter{trouve}{FAUX}%
+			\tantque%
+				{non trouve et j $\leq$ obtenirNbFils(a)}%
+				{\sialorssinon%
+					{obtenirIemeCaractere(mot, i) $=$ obtenirCaractere(obtenirElementLC(l))}%
+					{\affecter{trouve}{VRAI}}%
+					{\affecter{l}{obtenirListeSuivante(l)}%
+					\affecter{j}{j+1}}%
+				}%
+			\sialorssinon%
+				{trouve}%
+				{\sialors%
+					{i $=$ longueur(mot)}%
+					{\sialors%
+						{non obtenirBooleen(a)}%
+						{\instruction{fixerBooleen(a, VRAI)}}%
+					\affecter{a}{obtenirElementLC(l)}%
+					}%
+				}%
+				{\affecter{temp}{arbreNaire()}%
+				\instruction{fixerCaractere(temp, obtenirIemeCaractere(mot, i))}%
+				\sialorssinon%
+					{i $=$ longueur(m)}%
+					{\instruction{fixerBooleen(temp, VRAI)}%
+					\affecter{motAjoute}{VRAI}}%
+					{\instruction{fixerBooleen(temp, FAUX)}}%
+				\instruction{fixerFils(a, temp)}%
+				\instruction{fixerNbFils(a, obtenirNbFils(a) $+$ 1)}%
+				}%
+			\affecter{i}{i+1}%
+			}
+		}\\
+		
+		\procedureAvecPreconditions{dictionnaireEnFichier}%
+		{\paramEntreeSortie{fdico : Fichier}, \paramEntree{dico : Dictionnaire}}%
+		{estOuvert(fdico)}%
+		{temp : Liste Chainee <ArbreNaire <Element>>, a : ArbreNaire <Element>, i : \naturel}%
+		{\affecter{a}{obtenirArbre(dico)}%
+		\sialors%
+			{non estVide(a)}%
+			{\instruction{ecrireCaractere(fdico, obtenirCaractere(a))}%
+			\instruction{ecrireCaractere(fdico, obtenirBooleen(a))}%
+			\instruction{ecrireCaractere(fdico, nbFils(a))}%
+			\affecter{temp}{obtenirFils(a)}%
+			\pour{i}{1}{obtenirNbFils(a)}{}%
+				{\instruction{dictionnaireEnFichier(fdico, obtenirElement(temp))}%
+				\affecter{temp}{obtenirListeSuivante(temp)}
+				}
+			}
+		}\\
+		
+        \procedureAvecPreconditions{fichierEnDictionnaire}%
+        {\paramEntreeSortie{dico : Dictionnaire}, \paramEntree{fdico : Fichier}}%
+        {estOuvert(fdico)}%
+        {temp, a : AbreNaire <Element>, i : \naturelNonNul, nbFils : \naturel, c : \caractere, bool : \booleen}%
+        {\affecter{a}{obtenirArbre(d)}%
+        \sialors%
+        	{non finFichier(fdico)}%
+        	{\affecter{fdico, c}{lireCaractere(fdico)}%
+        	\instruction{fixerCaractere(a, c)}%
+        	\affecter{fdico, bool}{lireCaractere(fdico)}%
+        	\instruction{fixerBooleen(a, bool)}%
+        	\affecter{fdico, nbFils}{lireCaractere(fdico)}%
+        	\instruction{fixerNbFils(a, nbFils)}%
+        	\affecter{temp}{arbreNaire()}%
+        	\pour{i}{1}{nbFils}{}%
+        		{\instruction{fichierEnDictionnaire(temp, fdico)}%
+        		\instruction{fixerFils(a, temp)}%
+        		}%
+        	}
+        }
+	\end{algorithme}
+
+\subsubsection{TAD Correcteur Orthographique}
+	\begin{algorithme}
+		\begin{enregistrement}{Correcteur Orthographique}
+			\champEnregistrement{dictionnaire}{Dictionnaire}
+			\champEnregistrement{corrections}{Ensemble <Mot>}
+		\end{enregistrement}\\
+		
+		\fonction{creerCorrecteur}%
+		{dico : Dictionnaire}%
+		{Correcteur Orthographique}%
+		{corr : Correcteur Orthographique}%
+		{\affecter{corr.dictionnaire}{dico}%
+		\affecter{corr.corrections}{ensemble()}%
+		\retourner{corr}}\\
+		
+		\procedureAvecPreconditions{corrigeParInversion}%
+		{\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}%
+		{longueur(mot) $\geq$ 2}%
+		{i : \naturelNonNul, testMot : Mot}%
+		{\pour{i}{1}{longueur(mot) $-$ 1}{}%
+			{\affecter{testMot}{inversionLettres(mot, i)}%
+			\sialors%
+				{estPresentDansDictionnaire(testMot, corr)}%
+				{\instruction{ajouteCorrection(corr, testMot)}}%
+			}%
+		}\\
+		
+		\procedure{corrigeParInsertion}%
+		{\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}%
+		{i, j : \naturelNonNul, testMot: Mot}
+		{\pour{i}{1}{longueur(mot) $+$ 1}{}{%
+			\pour{j}{ord("a")}{ord("a")+26}{}{%
+				\affecter{testMot}{inversionLettres(mot, i)}%
+				\sialors%
+					{estPresentDansDictionnaire(testMot, corr)}%
+					{\instruction{ajouteCorrection(corr, testMot)}}%
+				}
+			}
+		}\\
+		
+        \procedureAvecPreconditions{corrigeParDecomposition}%
+        {\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}%
+        {longueur(mot) $\geq$ 2}%
+		{i : \naturelNonNul, testMot1, testMot2 : Mot}%
+		{\pour{i}{1}{longueur(mot) $-$ 1}{}{%
+			\affecter{testMot1, testMot2}{decomposerMot(mot, i)}
+			\sialors%
+				{estPresentDansDictionnaire(testMot1, corr)}%
+				{\instruction{ajouteCorrection(corr, testMot1)}}%
+			\sialors%
+				{estPresentDansDictionnaire(testMot1, corr)}%
+				{\instruction{ajouteCorrection(corr, testMot1)}}%
+			}
+		}\\
+                
+        \procedureAvecPreconditions{corrigeParSuppression}%
+        {\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}%
+        {longueur(mot) $\geq$ 2}%
+		{i : \naturelNonNul, testMot: Mot}%
+		{\pour{i}{1}{longueur(mot)}{}{%
+			\affecter{testMot}{supprimeLettre(mot, i)}
+			\sialors%
+				{estPresentDansDictionnaire(testMot, corr)}%
+				{\instruction{ajouteCorrection(corr, testMot)}}%
+			}
+		}\\
+        
+        \procedureAvecPreconditions{corrigeParRemplacement}%
+        {\paramEntreeSortie{corr : Correcteur Orthographique}, \paramEntree{mot : Mot}}%
+        {longueur(mot) $\geq$ 2}%
+        {i, j : \naturelNonNul, testMot : Mot}
+        {\pour{i}{1}{longueur(mot)}{}{%
+			\pour{j}{ord("a")}{ord("a") $+$ 26}{}{%
+				\affecter{testMot}{remplaceLettre(mot, i)}%
+				\sialors%
+					{estPresentDansDictionnaire(testMot, corr)}%
+					{\instruction{ajouteCorrection(corr, testMot)}}%
+				}
+			}
+		}\\
+	\end{algorithme}
+
+%\end{document}
